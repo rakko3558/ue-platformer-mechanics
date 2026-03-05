@@ -20,7 +20,7 @@ AMyCharacter::AMyCharacter()
     {
         UE_LOG(LogTemp, Warning, TEXT("SUCCESS: CubeMeshAsset.Succeeded"));
         MyCubeMesh->SetStaticMesh(MeshAsset.Object);
-        // 
+      
         MyCubeMesh->SetRelativeScale3D(FVector(2.0f, 2.0f, 2.0f));
         MyCubeMesh->SetRelativeLocation(FVector(0.0f, 0.0f, -30.0f));
     }
@@ -44,36 +44,26 @@ AMyCharacter::AMyCharacter()
     /*capsule*/
     GetCapsuleComponent()->SetCapsuleHalfHeight(34.f);
 
-    // 
     CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
-    CameraBoom->SetupAttachment(RootComponent); // 
-    CameraBoom->TargetArmLength = 400.0f;       // 
-    CameraBoom->bUsePawnControlRotation = true; //  Controller 
+    CameraBoom->SetupAttachment(RootComponent); 
+    CameraBoom->TargetArmLength = 400.0f;       
+    CameraBoom->bUsePawnControlRotation = true; 
 
-    // 
     FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
     FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
-    FollowCamera->bUsePawnControlRotation = false; // 
+    FollowCamera->bUsePawnControlRotation = false; 
 
-    // 
-    bUseControllerRotationYaw = false; //  
-    //GetCharacterMovement()->bOrientRotationToMovement = true; // 
-
-    // 1.  (Step Up)
+    bUseControllerRotationYaw = false;  
+   
+    GetCharacterMovement()->MaxStepHeight = 45.0f;
 
     GetCharacterMovement()->MaxStepHeight = 45.0f;
 
-    // 2.  ()
-    GetCharacterMovement()->MaxStepHeight = 45.0f;
-
-    // 3. 
     GetCharacterMovement()->MaxWalkSpeed = 600.0f;
     GetCharacterMovement()->JumpZVelocity = 400.0f;
 
-    // 4.  
     GetCharacterMovement()->AirControl = 0.35f;
 
-    // 
     GetCharacterMovement()->GravityScale = 3.0f;
 }
 
@@ -121,16 +111,15 @@ void AMyCharacter::Move(const FInputActionValue& Value)
 
     if (Controller != nullptr)
     {
-        // 
+      
         const FRotator Rotation = Controller->GetControlRotation();
         const FRotator YawRotation(0, Rotation.Yaw, 0);
 
-        // 
+      
         const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-        // 
+      
         const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
-        //
         AddMovementInput(ForwardDirection, MovementVector.Y);
         AddMovementInput(RightDirection, MovementVector.X);
 
